@@ -78,7 +78,7 @@ resource "google_compute_url_map" "alb_url_map" {
   default_service = local.backend_svc_ids[each.key]
 
   host_rule {
-    hosts        = ["${each.value.name}.site"]
+    hosts        = ["${each.value.name}.${var.lb.domain}"]
     path_matcher = "default-matcher"
   }
 
@@ -103,7 +103,7 @@ resource "google_compute_url_map" "alb_url_map" {
       # rewrite '/' to '/index.html'
       route_action {
         url_rewrite {
-          host_rewrite        = "${each.value.name}.site"
+          host_rewrite        = "${each.value.name}.${var.lb.domain}"
           path_prefix_rewrite = "/index.html"
         }
       }
@@ -178,7 +178,7 @@ resource "google_compute_managed_ssl_certificate" "alb_managed_cert" {
   name    = "${each.value.name}-managed-alb-certs"
 
   managed {
-    domains = ["${each.value.name}.site"]
+    domains = ["${each.value.name}.${var.lb.domain}"]
   }
 }
 
@@ -187,7 +187,7 @@ resource "google_dns_managed_zone" "domain_managed_zone" {
   for_each = local.private_gcs
 
   name     = each.value.name
-  dns_name = "${each.value.name}.site."
+  dns_name = "${each.value.name}.${var.lb.domain}."
 
   force_destroy = "true"
 }

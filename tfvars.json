@@ -24,5 +24,8 @@
             "name": "sa-private-gcs",
             "display_name": "Service account to access the private GCS bucket"
         }
+    },
+    "lb": {
+        "domain": "site"
     }
 }

@@ -6,3 +6,10 @@ variable "project" {
 variable "region" {
   default = ""
 }
+
+# lb
+variable "lb" {
+  type = object({
+    domain = string
+  })
+}
