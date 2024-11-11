@@ -38,6 +38,21 @@ git clone https://github.com/localdotcom/testwork-9682.git
 
 ## Deployment
 
+The code is modular, allowing users to create any number of static sites by simply adding a new entry under `gcs.buckets` in `tfvars.json`:
+```bash
+{
+    "gcs": {
+        "buckets": [
+            "one",
+            "two",
+            ...
+            "five"
+        ]
+        
+    }
+}
+```
+
 **NOTE:** Execute all commands under a project's directory using script called `terraform`.
 
 - ### Deploy a private GCS Bucket:
