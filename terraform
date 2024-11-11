@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+
+"""
+Terraform wrapper to deploy resources
+"""
+
+import os
+import sys
+import argparse
+import requests
+import subprocess
+import json
+import shutil
+import glob
+from rich.console import Console
+
+console = Console(force_terminal=True)
+
+# declare variables
+resource_path = (os.path.join(os.path.dirname(os.path.abspath(__file__)),"resources"))
+var_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"tfvars.json")
+deletion_protection = False
+
+# parse file 'tfvars.json' to get list of resources
+with open(var_file, 'r') as file:
+	file_contents = json.load(file)
+	list_resources = file_contents['terraform']['resources']
+	
+	list_resources.append('all')
+
+# declare command-line arguments
+parser = argparse.ArgumentParser(description='Deploy resources to the Google Cloud Platform using Terraform')
+parser.add_argument('action', choices=['plan', 'apply', 'destroy'])
+parser.add_argument('resources', nargs='?', choices=list_resources, default='all')
+parser.add_argument('-p', '--project', required=True)
+parser.add_argument('-r', '--region', required=True)
+args = parser.parse_args()
+
+# validate args.resources
+def validate_args_resources():
+	if not isinstance(args.resources, list): # check whether the 'args.resources' is a list or not
+	    args.resources = [args.resources]
+	
+	if args.resources == ['all']: # check whether the 'args.resources' is 'all'
+		list_resources.remove('all')
+		
+		if args.action == 'destroy': # iterate over the list of resources in reverse order if action is 'destroy'
+			args.resources = reversed(list_resources)
+		else:
+			args.resources = list_resources
+
+# terraform init function
+def run_terraform_init():
+	subprocess.run("rm -rf .terraform*", shell=True, check=True)
+	subprocess.run("terraform init", shell=True, check=True)
+
+# terraform plan function
+def run_terraform_plan():
+	subprocess.run("terraform plan -var-file=%s" % var_file, shell=True, check=True)
+
+# terraform apply function
+def run_terraform_apply(resource, project):
+	subprocess.run("terraform apply -var-file=%s" % var_file, shell=True) # return 'subprocess.run' result
+
+# terraform destroy function
+def run_terraform_destroy(resource, project):
+	subprocess.run("terraform destroy -var-file=%s" % var_file, shell=True)
+
+# main function
+def main(action, resources, project, region):
+
+	# declare terraform variables
+	os.environ['TF_VAR_project'] = project
+	os.environ['TF_VAR_region'] = region
+
+	os.environ['GCP_PROJECT_ID'] = project
+
+	for resource in resources:
+		os.chdir(os.path.join(resource_path, resource)) # set path to the resource
+
+		backend = "%s-tfstate" % project
+		backend_path = "%s/%s" % (backend, resource)
+		os.environ['TF_CLI_ARGS_init'] = "-backend-config='bucket=%s' -backend-config='prefix=%s'" % (backend, resource)
+			
+		print("\n----------------")
+		console.print("[bold cyan]resource:[/bold cyan]", resource)
+		console.print("\n[bold cyan]Project:[/bold cyan]", project)
+		console.print("\n[bold cyan]Backend path:[/bold cyan]", backend_path)
+
+		run_terraform_init()
+
+		if action == 'plan':
+			run_terraform_plan()
+		elif action == 'apply':
+			run_terraform_apply(resource, project)
+		elif action == 'destroy':
+			if deletion_protection is True: # allow to destroy resource(s) only when 'deletion_protection' is True
+				console.print("[bold red]terraform: error: operation not permitted\nto destroy resource(s) set 'deletion_protection' to 'False'[/bold red]")
+			else:
+				run_terraform_destroy(resource, project)
+				subprocess.run("gsutil rm -r gs://%s" % backend_path, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True) # remove folder described in 'backend_path' from backend
+
+if __name__ == '__main__':
+	validate_args_resources()
+	main(action=args.action, resources=args.resources, project=args.project, region=args.region)
