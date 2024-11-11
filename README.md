@@ -48,7 +48,6 @@ The code is modular, allowing users to create any number of static sites by simp
             ...
             "five"
         ]
-        
     }
 }
 ```
