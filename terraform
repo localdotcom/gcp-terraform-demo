@@ -7,7 +7,6 @@ Terraform wrapper to deploy resources
 import os
 import sys
 import argparse
-import requests
 import subprocess
 import json
 from rich.console import Console
