@@ -7,10 +7,6 @@
         ]
     },
     "gcs": {
-        "buckets": [
-            "one",
-            "two"
-        ],
         "location": "EU",
         "storage_class": "STANDARD",
         "public_access_prevention": "enforced",
@@ -26,6 +22,9 @@
         }
     },
     "lb": {
-        "domain": "site"
+        "domains": [
+            "testwork-9682-one.site",
+            "testwork-9682-two.site"
+        ]
     }
 }

@@ -1,8 +1,8 @@
 # create a bucket
 resource "google_storage_bucket" "private_gcs" {
-  for_each = toset(var.gcs.buckets)
+  for_each = toset(var.lb.domains)
 
-  name                        = "${var.project}-${each.value}"
+  name                        = element(regex("^(.+)\\.[^.]+$", "${each.key}"), 1)
   location                    = var.gcs.location
   storage_class               = var.gcs.storage_class
   public_access_prevention    = var.gcs.public_access_prevention

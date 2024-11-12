@@ -38,17 +38,17 @@ git clone https://github.com/localdotcom/testwork-9682.git
 
 ## Deployment
 
-The code is modular, allowing users to create any number of static sites by simply adding a new entry under `gcs.buckets` in `tfvars.json`:
+The code is modular, allowing users to create any number of static sites by simply adding a new entry under `lb.domains` in `tfvars.json`:
 ```bash
-{
-    "gcs": {
-        "buckets": [
-            "one",
-            "two",
-            ...
-            "five"
-        ]
-    }
+}
+  "lb": {
+      "domains": [
+          "testwork-9682-one.site",
+          "testwork-9682-two.site",
+          ...
+          "testwork-9682-five.site",
+      ]
+  }
 }
 ```
 

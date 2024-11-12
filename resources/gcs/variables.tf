@@ -10,7 +10,6 @@ variable "region" {
 # gcs
 variable "gcs" {
   type = object({
-    buckets                     = list(string)
     location                    = string
     storage_class               = string
     public_access_prevention    = string
@@ -18,5 +17,12 @@ variable "gcs" {
     versioning = object({
       enabled = bool
     })
+  })
+}
+
+# lb
+variable "lb" {
+  type = object({
+    domains = list(string)
   })
 }

@@ -10,6 +10,6 @@ variable "region" {
 # lb
 variable "lb" {
   type = object({
-    domain = string
+    domains = list(string)
   })
 }

@@ -70,15 +70,15 @@ resource "google_compute_url_map" "https_redirect_url_map" {
 
 # create an ALB url_map
 resource "google_compute_url_map" "alb_url_map" {
-  for_each = local.private_gcs
+  for_each = toset(var.lb.domains)
 
   provider        = google-beta
   project         = var.project
-  name            = "${each.value.name}-alb-url-map"
+  name            = "${element(regex("^(.+)\\.[^.]+$", each.key), 1)}-alb-url-map"
   default_service = local.backend_svc_ids[each.key]
 
   host_rule {
-    hosts        = ["${each.value.name}.${var.lb.domain}"]
+    hosts        = ["${each.key}"]
     path_matcher = "default-matcher"
   }
 
@@ -103,7 +103,7 @@ resource "google_compute_url_map" "alb_url_map" {
       # rewrite '/' to '/index.html'
       route_action {
         url_rewrite {
-          host_rewrite        = "${each.value.name}.${var.lb.domain}"
+          host_rewrite        = each.key
           path_prefix_rewrite = "/index.html"
         }
       }
@@ -172,22 +172,22 @@ resource "google_compute_global_address" "alb_global_address" {
 
 # create a managed ssl certificate
 resource "google_compute_managed_ssl_certificate" "alb_managed_cert" {
-  for_each = local.private_gcs
+  for_each = toset(var.lb.domains)
 
   project = var.project
-  name    = "${each.value.name}-managed-alb-certs"
+  name    = "${element(regex("^(.+)\\.[^.]+$", each.key), 1)}-managed-alb-certs"
 
   managed {
-    domains = ["${each.value.name}.${var.lb.domain}"]
+    domains = ["${each.key}"]
   }
 }
 
 # create a DNS zone
 resource "google_dns_managed_zone" "domain_managed_zone" {
-  for_each = local.private_gcs
+  for_each = toset(var.lb.domains)
 
-  name     = each.value.name
-  dns_name = "${each.value.name}.${var.lb.domain}."
+  name     = element(regex("^(.+)\\.[^.]+$", "${each.key}"), 1)
+  dns_name = "${each.key}."
 
   force_destroy = "true"
 }
