@@ -59,11 +59,11 @@ def run_terraform_plan():
 	subprocess.run("terraform plan -var-file=%s" % var_file, shell=True, check=True)
 
 # terraform apply function
-def run_terraform_apply(resource, project):
+def run_terraform_apply():
 	subprocess.run("terraform apply -var-file=%s" % var_file, shell=True) # return 'subprocess.run' result
 
 # terraform destroy function
-def run_terraform_destroy(resource, project):
+def run_terraform_destroy():
 	subprocess.run("terraform destroy -var-file=%s" % var_file, shell=True)
 
 # main function
@@ -92,12 +92,12 @@ def main(action, resources, project, region):
 		if action == 'plan':
 			run_terraform_plan()
 		elif action == 'apply':
-			run_terraform_apply(resource, project)
+			run_terraform_apply()
 		elif action == 'destroy':
 			if deletion_protection is True: # allow to destroy resource(s) only when 'deletion_protection' is True
 				console.print("[bold red]terraform: error: operation not permitted\nto destroy resource(s) set 'deletion_protection' to 'False'[/bold red]")
 			else:
-				run_terraform_destroy(resource, project)
+				run_terraform_destroy()
 				subprocess.run("gsutil rm -r gs://%s" % backend_path, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True) # remove folder described in 'backend_path' from backend
 
 if __name__ == '__main__':
