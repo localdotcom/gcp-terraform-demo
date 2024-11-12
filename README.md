@@ -52,7 +52,7 @@ The code is modular, allowing users to create any number of static sites by simp
 }
 ```
 
-**NOTE:** Execute all commands under a project's directory using script called `terraform`.
+**NOTE:** Execute all commands under the project's directory using script called `terraform`.
 
 - ### Deploy a private GCS Bucket:
 ```bash
