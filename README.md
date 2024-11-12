@@ -41,14 +41,14 @@ git clone https://github.com/localdotcom/testwork-9682.git
 The code is modular, allowing users to create any number of static sites by simply adding a new entry under `lb.domains` in `tfvars.json`:
 ```bash
 }
-  "lb": {
-      "domains": [
-          "testwork-9682-one.site",
-          "testwork-9682-two.site",
-          ...
-          "testwork-9682-five.site",
-      ]
-  }
+    "lb": {
+        "domains": [
+            "testwork-9682-one.site",
+            "testwork-9682-two.site",
+            ...
+            "testwork-9682-five.site",
+        ]
+    }
 }
 ```
 
