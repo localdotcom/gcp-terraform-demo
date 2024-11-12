@@ -46,7 +46,7 @@ The code is modular, allowing users to create any number of static sites by simp
             "testwork-9682-one.site",
             "testwork-9682-two.site",
             ...
-            "testwork-9682-five.site",
+            "testwork-9682-five.site"
         ]
     }
 }
