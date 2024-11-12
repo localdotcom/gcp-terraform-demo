@@ -76,7 +76,7 @@ The code is modular, allowing users to create any number of static sites by simp
 
   -  Go to **Google Cloud Console > Cloud DNS > Zones**.
   -  Select your DNS zone.
-  - Note the four nameservers listed under **NS records** (they'll look something like ns-cloud-a1.googledomains.com, ns-cloud-a2.googledomains.com, etc.).
+  - Note the four nameservers listed under **NS records** (they'll look something like `ns-cloud-a1.googledomains.com`, `ns-cloud-a2.googledomains.com`, etc.).
   - Log into your account at your domain registrar (e.g., GoDaddy, Namecheap, or any other registrar).
   - Go to the **DNS settings** or **Nameserver settings** for your domain
   - Find the section where you can update your nameservers (this is often labeled "Custom Nameservers" or similar).
