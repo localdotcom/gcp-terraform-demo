@@ -79,14 +79,14 @@ The code is modular, allowing users to create any number of static sites by simp
   - Note the four nameservers listed under **NS records** (they'll look something like ns-cloud-a1.googledomains.com, ns-cloud-a2.googledomains.com, etc.).
   - Log into your account at your domain registrar (e.g., GoDaddy, Namecheap, or any other registrar).
   - Go to the **DNS settings** or **Nameserver settings** for your domain
-  - Find the section where you can update your nameservers (this is often labeled "Custom Nameservers" or similar)
+  - Find the section where you can update your nameservers (this is often labeled "Custom Nameservers" or similar).
   - Enter the four GCP nameservers from your DNS zone. Be sure to add all of them.
   - Save or apply the changes.
 
 
 ## Testing
 
-- ### Upload a static content to a newly created private bucket
+- ### Upload a static content to a newly created private bucket.
 - ### Open a browser and go to the website's URL. If the site loads as expected, it’s likely working for most users.
 - ### Try opening it in an incognito or private window to avoid caching issues.
 
