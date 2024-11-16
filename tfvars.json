@@ -23,8 +23,8 @@
     },
     "lb": {
         "domains": [
-            "testwork-9682-one.site",
-            "testwork-9682-two.site"
+            "gcp-terraform-demo-one.site",
+            "gcp-terraform-demo-two.site"
         ]
     }
 }

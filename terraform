@@ -16,7 +16,7 @@ console = Console(force_terminal=True)
 # declare variables
 resource_path = (os.path.join(os.path.dirname(os.path.abspath(__file__)),"resources"))
 var_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"tfvars.json")
-deletion_protection = True
+deletion_protection = False
 
 # parse file 'tfvars.json' to get list of resources
 with open(var_file, 'r') as file:
